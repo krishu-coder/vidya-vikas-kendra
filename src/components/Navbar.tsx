@@ -32,12 +32,16 @@ const Navbar = () => {
             <Link to="/courses" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">Courses</Link>
             <Link to="/about" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">About</Link>
             <Link to="/contact" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">Contact</Link>
-            <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white">
-              Sign In
-            </Button>
-            <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange">
-              Register
-            </Button>
+            <Link to="/signin">
+              <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/register">
+              <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange">
+                Register
+              </Button>
+            </Link>
           </div>
           
           {/* Mobile menu button */}
@@ -73,12 +77,16 @@ const Navbar = () => {
               Contact
             </Link>
             <div className="flex flex-col space-y-2 pt-2">
-              <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white w-full">
-                Sign In
-              </Button>
-              <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange w-full">
-                Register
-              </Button>
+              <Link to="/signin">
+                <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white w-full">
+                  Sign In
+                </Button>
+              </Link>
+              <Link to="/register">
+                <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange w-full">
+                  Register
+                </Button>
+              </Link>
             </div>
           </div>
         )}
