@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from '../components/Navbar';
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Search, Clock, Users, BookOpen, ChevronRight, Filter } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Courses = () => {
   const courses = [
@@ -102,7 +102,6 @@ const Courses = () => {
           
           <div className="container mx-auto px-4 md:px-6 py-10">
             <div className="flex flex-col md:flex-row gap-8">
-              {/* Filters sidebar */}
               <div className="w-full md:w-64 shrink-0">
                 <div className="bg-white p-5 rounded-lg shadow-sm sticky top-6">
                   <div className="flex items-center justify-between mb-5">
@@ -176,7 +175,6 @@ const Courses = () => {
                 </div>
               </div>
               
-              {/* Course listings */}
               <div className="flex-grow">
                 <div className="flex justify-between items-center mb-6">
                   <p className="text-gray-600">Showing {courses.length} results</p>
@@ -223,9 +221,11 @@ const Courses = () => {
                         </div>
                       </CardContent>
                       <CardFooter>
-                        <Button className="w-full bg-gujarat-blue hover:bg-blue-700">
-                          View Course <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
+                        <Link to={`/courses/${course.id}`} className="w-full">
+                          <Button className="w-full bg-gujarat-blue hover:bg-blue-700">
+                            View Course <ChevronRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </Link>
                       </CardFooter>
                     </Card>
                   ))}
