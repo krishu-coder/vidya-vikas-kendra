@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { TooltipProvider } from "@/components/ui/tooltip";
 import Navbar from '../components/Navbar';
 import HeroBanner from '../components/HeroBanner';
 import FeaturesSection from '../components/FeaturesSection';
@@ -11,18 +12,20 @@ import Footer from '../components/Footer';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Navbar />
-      <main>
-        <HeroBanner />
-        <FeaturesSection />
-        <CourseSection />
-        <DashboardPreview />
-        <TestimonialSection />
-        <CallToActionSection />
-      </main>
-      <Footer />
-    </div>
+    <TooltipProvider>
+      <div className="min-h-screen flex flex-col">
+        <Navbar />
+        <main>
+          <HeroBanner />
+          <FeaturesSection />
+          <CourseSection />
+          <DashboardPreview />
+          <TestimonialSection />
+          <CallToActionSection />
+        </main>
+        <Footer />
+      </div>
+    </TooltipProvider>
   );
 };
 
