@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -12,6 +11,8 @@ import Contact from "./pages/Contact";
 import Faq from "./pages/Faq";
 import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
+import AdminLayout from "./components/admin/AdminLayout";
+import Dashboard from "./pages/admin/Dashboard";
 
 // Create a new QueryClient instance
 const queryClient = new QueryClient();
@@ -30,6 +31,14 @@ const App = () => (
         <Route path="/faq" element={<Faq />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="courses" element={<div>Courses Management</div>} />
+          <Route path="users" element={<div>Users Management</div>} />
+          <Route path="settings" element={<div>Admin Settings</div>} />
+        </Route>
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
