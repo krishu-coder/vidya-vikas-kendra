@@ -1,17 +1,53 @@
 
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
+import { useToast } from "@/components/ui/use-toast";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { authenticateUser, setAuthUser } from '@/utils/auth';
 
 const SignIn = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add sign in logic here when ready
-    console.log('Sign in submitted');
+    
+    const user = authenticateUser(formData.email, formData.password);
+    
+    if (user) {
+      setAuthUser(user);
+      toast({
+        title: "Success",
+        description: "You have successfully signed in",
+      });
+      
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/student-profile');
+      }
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Invalid email or password",
+      });
+    }
   };
 
   return (
@@ -35,6 +71,8 @@ const SignIn = () => {
                   id="email"
                   name="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   autoComplete="email"
                   required
                   className="mt-1"
@@ -49,6 +87,8 @@ const SignIn = () => {
                   id="password"
                   name="password"
                   type="password"
+                  value={formData.password}
+                  onChange={handleChange}
                   autoComplete="current-password"
                   required
                   className="mt-1"

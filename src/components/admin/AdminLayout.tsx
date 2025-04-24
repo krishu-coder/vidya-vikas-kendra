@@ -3,12 +3,10 @@ import React from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from './AdminSidebar';
-
-// TODO: Replace with actual auth check
-const isAdmin = true;
+import { isAdmin } from '@/utils/auth';
 
 const AdminLayout = () => {
-  if (!isAdmin) {
+  if (!isAdmin()) {
     return <Navigate to="/signin" replace />;
   }
 

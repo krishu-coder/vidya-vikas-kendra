@@ -13,8 +13,8 @@ import SignIn from "./pages/SignIn";
 import Register from "./pages/Register";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
+import StudentProfile from "./pages/StudentProfile";
 
-// Create a new QueryClient instance
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -31,6 +31,7 @@ const App = () => (
         <Route path="/faq" element={<Faq />} />
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/student-profile" element={<StudentProfile />} />
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
