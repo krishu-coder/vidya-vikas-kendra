@@ -14,6 +14,9 @@ import Register from "./pages/Register";
 import AdminLayout from "./components/admin/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
 import StudentProfile from "./pages/StudentProfile";
+import CoursesManagement from "./pages/admin/CoursesManagement";
+import UsersManagement from "./pages/admin/UsersManagement";
+import Settings from "./pages/admin/Settings";
 
 const queryClient = new QueryClient();
 
@@ -35,9 +38,9 @@ const App = () => (
 
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
-          <Route path="courses" element={<div>Courses Management</div>} />
-          <Route path="users" element={<div>Users Management</div>} />
-          <Route path="settings" element={<div>Admin Settings</div>} />
+          <Route path="courses" element={<CoursesManagement />} />
+          <Route path="users" element={<UsersManagement />} />
+          <Route path="settings" element={<Settings />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
