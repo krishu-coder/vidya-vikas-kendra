@@ -4,14 +4,22 @@ import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, User, LogOut } from 'lucide-react';
 import { getAuthUser, setAuthUser } from '@/utils/auth';
+import { useLanguage } from '@/contexts/LanguageContext';
+import LanguageSelector from './LanguageSelector';
+import { toast } from '@/hooks/use-toast';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const user = getAuthUser();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleLogout = () => {
     setAuthUser(null);
+    toast({
+      title: "Logged out",
+      description: "You have been successfully logged out",
+    });
     navigate('/');
   };
 
@@ -36,17 +44,19 @@ const Navbar = () => {
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex space-x-6 items-center">
-            <Link to="/" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">Home</Link>
-            <Link to="/courses" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">Courses</Link>
-            <Link to="/about" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">About</Link>
-            <Link to="/contact" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">Contact</Link>
+            <Link to="/" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">{t('nav.home')}</Link>
+            <Link to="/courses" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">{t('nav.courses')}</Link>
+            <Link to="/about" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">{t('nav.about')}</Link>
+            <Link to="/contact" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">{t('nav.contact')}</Link>
+            
+            <LanguageSelector />
             
             {user ? (
               <div className="flex items-center space-x-4">
                 <Link to={user.role === 'admin' ? '/admin' : '/student-profile'}>
                   <Button variant="outline" className="flex items-center space-x-2">
                     <User className="h-4 w-4" />
-                    <span>My Profile</span>
+                    <span>{t('nav.profile')}</span>
                   </Button>
                 </Link>
                 <Button 
@@ -55,19 +65,19 @@ const Navbar = () => {
                   className="flex items-center space-x-2 text-red-500 hover:text-red-700"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
+                  <span>{t('nav.logout')}</span>
                 </Button>
               </div>
             ) : (
               <>
                 <Link to="/signin">
                   <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white">
-                    Sign In
+                    {t('nav.signin')}
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange">
-                    Register
+                    {t('nav.register')}
                   </Button>
                 </Link>
               </>
@@ -75,12 +85,14 @@ const Navbar = () => {
           </div>
           
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center">
+            <LanguageSelector />
             <Button 
               variant="ghost" 
               size="icon" 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Toggle menu"
+              className="ml-2"
             >
               {isMenuOpen ? (
                 <X className="h-6 w-6" />
@@ -95,16 +107,16 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="mt-4 md:hidden flex flex-col space-y-4 pb-4">
             <Link to="/" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">
-              Home
+              {t('nav.home')}
             </Link>
             <Link to="/courses" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">
-              Courses
+              {t('nav.courses')}
             </Link>
             <Link to="/about" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">
-              About
+              {t('nav.about')}
             </Link>
             <Link to="/contact" className="text-gujarat-navy hover:text-gujarat-blue transition-colors">
-              Contact
+              {t('nav.contact')}
             </Link>
             
             {user ? (
@@ -112,7 +124,7 @@ const Navbar = () => {
                 <Link to={user.role === 'admin' ? '/admin' : '/student-profile'}>
                   <Button variant="outline" className="w-full flex items-center justify-center space-x-2">
                     <User className="h-4 w-4" />
-                    <span>My Profile</span>
+                    <span>{t('nav.profile')}</span>
                   </Button>
                 </Link>
                 <Button 
@@ -121,19 +133,19 @@ const Navbar = () => {
                   className="w-full flex items-center justify-center space-x-2 text-red-500 hover:text-red-700"
                 >
                   <LogOut className="h-4 w-4" />
-                  <span>Logout</span>
+                  <span>{t('nav.logout')}</span>
                 </Button>
               </div>
             ) : (
               <div className="flex flex-col space-y-2 pt-2">
                 <Link to="/signin">
                   <Button variant="outline" className="border-gujarat-blue text-gujarat-blue hover:bg-gujarat-blue hover:text-white w-full">
-                    Sign In
+                    {t('nav.signin')}
                   </Button>
                 </Link>
                 <Link to="/register">
                   <Button className="bg-gujarat-saffron text-white hover:bg-gujarat-orange w-full">
-                    Register
+                    {t('nav.register')}
                   </Button>
                 </Link>
               </div>

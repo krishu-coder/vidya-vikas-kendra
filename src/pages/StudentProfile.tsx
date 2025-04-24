@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { getAuthUser } from '@/utils/auth';
 import Navbar from '../components/Navbar';
@@ -8,9 +8,10 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Book } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-// Mock data for enrolled courses
-const mockEnrolledCourses = [
+// All available courses
+const allCourses = [
   {
     id: 1,
     title: "Introduction to Computer Science",
@@ -35,10 +36,49 @@ const mockEnrolledCourses = [
     lastAccessed: "2023-04-18",
     image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=2232&auto=format&fit=crop",
   },
+  {
+    id: 4,
+    title: "Web Development Fundamentals",
+    description: "Learn HTML, CSS, and JavaScript to build responsive websites",
+    progress: 0,
+    lastAccessed: "N/A",
+    image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 5,
+    title: "Digital Marketing Essentials",
+    description: "Learn SEO, social media marketing, and content strategy",
+    progress: 0,
+    lastAccessed: "N/A",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+  },
+  {
+    id: 6,
+    title: "Gujarati Language for Beginners",
+    description: "Learn to speak, read, and write in Gujarati",
+    progress: 0,
+    lastAccessed: "N/A",
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+  },
 ];
 
 const StudentProfile = () => {
   const user = getAuthUser();
+  const { t } = useLanguage();
+  const [enrolledCourses, setEnrolledCourses] = useState([]);
+
+  useEffect(() => {
+    // Get enrolled courses from localStorage
+    const enrolledCourseIds = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+    
+    // Filter all courses to get only enrolled ones
+    const userCourses = allCourses.filter(course => 
+      enrolledCourseIds.includes(course.id)
+    );
+    
+    // If there are no enrolled courses yet, use the default mock data for demo purposes
+    setEnrolledCourses(userCourses.length > 0 ? userCourses : allCourses.slice(0, 3));
+  }, []);
 
   if (!user || user.role !== 'student') {
     return <Navigate to="/signin" replace />;
@@ -52,7 +92,7 @@ const StudentProfile = () => {
           {/* Student Profile Information */}
           <Card className="md:col-span-1">
             <CardHeader>
-              <CardTitle>Student Profile</CardTitle>
+              <CardTitle>{t('nav.profile')}</CardTitle>
               <CardDescription>Your personal information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
@@ -66,7 +106,7 @@ const StudentProfile = () => {
               </div>
               <div>
                 <label className="font-medium text-gray-700">Enrolled Courses:</label>
-                <p>{mockEnrolledCourses.length}</p>
+                <p>{enrolledCourses.length}</p>
               </div>
             </CardContent>
             <CardFooter>
@@ -81,36 +121,49 @@ const StudentProfile = () => {
               My Enrolled Courses
             </h2>
             
-            {mockEnrolledCourses.map((course) => (
-              <Card key={course.id} className="overflow-hidden">
-                <div className="flex flex-col md:flex-row">
-                  <div className="md:w-1/3 h-48 md:h-auto">
-                    <img 
-                      src={course.image} 
-                      alt={course.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="md:w-2/3 p-6">
-                    <CardTitle>{course.title}</CardTitle>
-                    <CardDescription className="mt-2">{course.description}</CardDescription>
-                    
-                    <div className="mt-4 space-y-2">
-                      <div className="flex justify-between text-sm">
-                        <span>Progress</span>
-                        <span>{course.progress}%</span>
-                      </div>
-                      <Progress value={course.progress} className="h-2" />
-                    </div>
-                    
-                    <div className="flex items-center justify-between mt-6">
-                      <p className="text-sm text-gray-500">Last accessed on {course.lastAccessed}</p>
-                      <Button>Continue Learning</Button>
-                    </div>
-                  </div>
-                </div>
+            {enrolledCourses.length === 0 ? (
+              <Card className="p-6 text-center">
+                <p className="text-gray-500">You haven't enrolled in any courses yet.</p>
+                <Button className="mt-4" asChild>
+                  <a href="/courses">Browse Courses</a>
+                </Button>
               </Card>
-            ))}
+            ) : (
+              enrolledCourses.map((course) => (
+                <Card key={course.id} className="overflow-hidden">
+                  <div className="flex flex-col md:flex-row">
+                    <div className="md:w-1/3 h-48 md:h-auto">
+                      <img 
+                        src={course.image} 
+                        alt={course.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="md:w-2/3 p-6">
+                      <CardTitle>{course.title}</CardTitle>
+                      <CardDescription className="mt-2">{course.description}</CardDescription>
+                      
+                      <div className="mt-4 space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span>{t('course.progress')}</span>
+                          <span>{course.progress}%</span>
+                        </div>
+                        <Progress value={course.progress} className="h-2" />
+                      </div>
+                      
+                      <div className="flex items-center justify-between mt-6">
+                        <p className="text-sm text-gray-500">
+                          Last accessed on {course.lastAccessed}
+                        </p>
+                        <Button href={`/courses/${course.id}`}>
+                          {t('course.continue')}
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))
+            )}
           </div>
         </div>
       </main>

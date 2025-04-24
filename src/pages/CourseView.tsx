@@ -1,19 +1,45 @@
 
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { Clock, Users, BookOpen } from 'lucide-react';
+import { getAuthUser } from '@/utils/auth';
+import { toast } from '@/hooks/use-toast';
+import { useLanguage } from '@/contexts/LanguageContext';
+
+// Helper function to check if a course is enrolled
+const isUserEnrolledInCourse = (courseId: number) => {
+  const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+  return enrolledCourses.includes(courseId);
+};
+
+// Helper function to enroll a user in a course
+const enrollUserInCourse = (courseId: number) => {
+  const enrolledCourses = JSON.parse(localStorage.getItem('enrolledCourses') || '[]');
+  if (!enrolledCourses.includes(courseId)) {
+    enrolledCourses.push(courseId);
+    localStorage.setItem('enrolledCourses', JSON.stringify(enrolledCourses));
+    return true;
+  }
+  return false;
+};
 
 const CourseView = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const user = getAuthUser();
+  const { t } = useLanguage();
+  const courseId = parseInt(id || '1');
+  
+  const [isEnrolled, setIsEnrolled] = useState(() => isUserEnrolledInCourse(courseId));
   
   // Mock course data - in a real app, this would come from an API
   const course = {
-    id: 1,
+    id: courseId,
     title: "Web Development Fundamentals",
     description: "Learn HTML, CSS, and JavaScript to build responsive websites. This comprehensive course covers everything you need to know to start your journey as a web developer. You'll learn through practical examples and hands-on projects.",
     duration: "8 weeks",
@@ -29,6 +55,35 @@ const CourseView = () => {
       "Modern Web Development Tools",
       "Building Real-world Projects"
     ]
+  };
+
+  const handleEnrollment = () => {
+    if (!user) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to enroll in courses",
+        variant: "destructive"
+      });
+      navigate('/signin');
+      return;
+    }
+
+    if (enrollUserInCourse(courseId)) {
+      setIsEnrolled(true);
+      toast({
+        title: "Enrollment Successful",
+        description: `You have successfully enrolled in ${course.title}`,
+      });
+    } else {
+      toast({
+        title: "Already Enrolled",
+        description: "You are already enrolled in this course",
+      });
+    }
+  };
+
+  const handleContinueLearning = () => {
+    navigate('/student-profile');
   };
 
   return (
@@ -57,9 +112,15 @@ const CourseView = () => {
                     <span>{course.level}</span>
                   </div>
                 </div>
-                <Button className="bg-gujarat-saffron hover:bg-gujarat-orange">
-                  Enroll Now
-                </Button>
+                {isEnrolled ? (
+                  <Button className="bg-green-600 hover:bg-green-700" onClick={handleContinueLearning}>
+                    {t('course.continue')}
+                  </Button>
+                ) : (
+                  <Button className="bg-gujarat-saffron hover:bg-gujarat-orange" onClick={handleEnrollment}>
+                    {t('course.enroll')}
+                  </Button>
+                )}
               </div>
               <div className="rounded-lg overflow-hidden shadow-xl">
                 <img 
@@ -119,9 +180,18 @@ const CourseView = () => {
                       <h4 className="font-medium text-gray-700">Enrolled</h4>
                       <p>{course.students} students</p>
                     </div>
-                    <Button className="w-full bg-gujarat-blue hover:bg-blue-700">
-                      Enroll Now
-                    </Button>
+                    {isEnrolled ? (
+                      <div className="bg-green-100 text-green-800 text-center py-2 rounded-md font-medium">
+                        {t('course.enrolled')}
+                      </div>
+                    ) : (
+                      <Button 
+                        className="w-full bg-gujarat-blue hover:bg-blue-700" 
+                        onClick={handleEnrollment}
+                      >
+                        {t('course.enroll')}
+                      </Button>
+                    )}
                   </div>
                 </CardContent>
               </Card>
