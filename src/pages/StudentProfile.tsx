@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
-import { book, progress } from 'lucide-react';
+import { Book } from 'lucide-react';
 
 // Mock data for enrolled courses
 const mockEnrolledCourses = [
@@ -77,7 +77,7 @@ const StudentProfile = () => {
           {/* Enrolled Courses */}
           <div className="md:col-span-2 space-y-6">
             <h2 className="text-2xl font-bold flex items-center">
-              <book className="mr-2 h-6 w-6" />
+              <Book className="mr-2 h-6 w-6" />
               My Enrolled Courses
             </h2>
             
