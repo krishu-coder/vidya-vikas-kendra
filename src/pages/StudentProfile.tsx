@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, Link } from 'react-router-dom';
 import { getAuthUser } from '@/utils/auth';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -125,7 +125,7 @@ const StudentProfile = () => {
               <Card className="p-6 text-center">
                 <p className="text-gray-500">You haven't enrolled in any courses yet.</p>
                 <Button className="mt-4" asChild>
-                  <a href="/courses">Browse Courses</a>
+                  <Link to="/courses">Browse Courses</Link>
                 </Button>
               </Card>
             ) : (
@@ -155,8 +155,8 @@ const StudentProfile = () => {
                         <p className="text-sm text-gray-500">
                           Last accessed on {course.lastAccessed}
                         </p>
-                        <Button href={`/courses/${course.id}`}>
-                          {t('course.continue')}
+                        <Button asChild>
+                          <Link to={`/courses/${course.id}`}>{t('course.continue')}</Link>
                         </Button>
                       </div>
                     </div>

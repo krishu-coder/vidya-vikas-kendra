@@ -19,6 +19,7 @@ import StudentProfile from "./pages/StudentProfile";
 import CoursesManagement from "./pages/admin/CoursesManagement";
 import UsersManagement from "./pages/admin/UsersManagement";
 import Settings from "./pages/admin/Settings";
+import LearningCenter from "./pages/LearningCenter";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ const App = () => (
           <Route path="/signin" element={<SignIn />} />
           <Route path="/register" element={<Register />} />
           <Route path="/student-profile" element={<StudentProfile />} />
+          <Route path="/learning-center" element={<LearningCenter />} />
 
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<Dashboard />} />
